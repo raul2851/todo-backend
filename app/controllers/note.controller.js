@@ -26,7 +26,21 @@ exports.addnote = (req, res) => {
 };
 
 exports.allnotes = async (req, res) => {
-    
-    const x = await Note.find({ id_user: req.body.id_user });
-    res.send(x);
+    const result = await Note.find({ id_user: req.body.id_user });
+    res.send(JSON.stringify(result));
 };
+
+exports.deletenote = async (req, res) => {
+    await Note.deleteOne({ _id: req.body.id_note });
+    res.send({ message: "Nota eliminada con exito." });
+};
+
+exports.updatenote = async (req, res) => {
+    const {title, description, completed, id_note} = req.body;
+
+    await Note.findByIdAndUpdate(id_note, 
+        {title, description, completed}
+    )
+
+    res.send({ message: "Nota editada con exito." });
+}
